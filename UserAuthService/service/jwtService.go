@@ -7,6 +7,7 @@ import (
 	"userauthservice/model"
 
 	"github.com/golang-jwt/jwt/v5"
+	"github.com/google/uuid"
 )
 
 type JwtService struct{}
@@ -15,21 +16,21 @@ func NewJwtService() *JwtService {
 	return &JwtService{}
 }
 
-func (s *JwtService) GenerateJwt(user *model.User) string {
+func (s *JwtService) GenerateJwt(user *model.User) (string, error) {
 	token := jwt.NewWithClaims(jwt.SigningMethodHS256, jwt.MapClaims{
-		"username": user.Username,
+		"id": user.ID,
 	})
 	secretKey := os.Getenv("JWT_SECRET")
 	tokenStr, err := token.SignedString([]byte(secretKey))
 	if err != nil {
 		fmt.Println("Error signing the JWT")
 	}
-	return tokenStr
+	return tokenStr, err
 }
 
-func (s *JwtService) ValidateJwt(tokenStr string) (bool, string) {
+func (s *JwtService) ValidateJwt(tokenStr string) uuid.UUID {
 	type CustomClaims struct {
-		username string
+		id uuid.UUID
 		jwt.RegisteredClaims
 	}
 	secretKey := os.Getenv("JWT_SECRET")
@@ -39,14 +40,14 @@ func (s *JwtService) ValidateJwt(tokenStr string) (bool, string) {
 
 	if err != nil {
 		fmt.Println("Token parsing error:", err)
-		return false, ""
+		return uuid.Nil
 	}
 	if !token.Valid {
 		fmt.Println("Invalid token")
-		return false, ""
+		return uuid.Nil
 	}
 	if claims, ok := token.Claims.(*CustomClaims); ok {
-		return true, claims.username
+		return claims.id
 	}
-	return false, ""
+	return uuid.Nil
 }

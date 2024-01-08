@@ -14,9 +14,10 @@ func NewUserService(userRepo *repository.UserRepository) *UserService {
 	return &UserService{userRepo: userRepo}
 }
 
-func (s *UserService) CreateUser(user *model.User) {
+func (s *UserService) CreateUser(user *model.User) error {
 	user.Password = util.GenerateHashedPwdString(user.Password)
-	s.userRepo.AddUser(user)
+	err := s.userRepo.AddUser(user)
+	return err
 }
 
 func (s *UserService) GetUser(user *model.User) *model.User {

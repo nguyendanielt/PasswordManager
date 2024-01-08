@@ -27,9 +27,11 @@ func (r *UserRepository) GetUserByEmailAndPassword(email string, password string
 	return &user
 }
 
-func (r *UserRepository) AddUser(user *model.User) {
+func (r *UserRepository) AddUser(user *model.User) error {
 	if err := r.db.Create(user).Error; err != nil {
 		fmt.Println("Error when adding user:", err)
+		return err
 	}
 	fmt.Println("Successfully added user")
+	return nil
 }

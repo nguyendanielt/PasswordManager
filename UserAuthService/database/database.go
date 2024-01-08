@@ -25,6 +25,8 @@ func CreateConnection() *gorm.DB {
 		log.Fatal(err)
 	}
 
+	// enable uuid-ossp extension
+	db.Exec("CREATE EXTENSION IF NOT EXISTS \"uuid-ossp\";")
 	// create table based on struct in userModel
 	db.AutoMigrate(&model.User{})
 
