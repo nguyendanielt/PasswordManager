@@ -4,7 +4,7 @@ import (
 	"log"
 	"os"
 
-	"authenticationservice/model"
+	"authservice/model"
 
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"

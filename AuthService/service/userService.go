@@ -1,9 +1,9 @@
 package service
 
 import (
-	"authenticationservice/model"
-	"authenticationservice/repository"
-	"authenticationservice/util"
+	"authservice/model"
+	"authservice/repository"
+	"authservice/util"
 )
 
 type UserService struct {

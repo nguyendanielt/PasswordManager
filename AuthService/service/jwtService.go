@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"os"
 
-	"authenticationservice/model"
+	"authservice/model"
 
 	"github.com/golang-jwt/jwt/v5"
 	"github.com/google/uuid"

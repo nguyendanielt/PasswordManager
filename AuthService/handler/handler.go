@@ -4,9 +4,9 @@ import (
 	"encoding/json"
 	"net/http"
 
-	"authenticationservice/model"
-	"authenticationservice/service"
-	"authenticationservice/util"
+	"authservice/model"
+	"authservice/service"
+	"authservice/util"
 
 	"github.com/google/uuid"
 )

@@ -4,10 +4,10 @@ import (
 	"log"
 	"net/http"
 
-	"authenticationservice/database"
-	"authenticationservice/handler"
-	"authenticationservice/repository"
-	"authenticationservice/service"
+	"authservice/database"
+	"authservice/handler"
+	"authservice/repository"
+	"authservice/service"
 
 	"github.com/gorilla/mux"
 )

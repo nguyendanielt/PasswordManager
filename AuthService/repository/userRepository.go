@@ -4,8 +4,8 @@ import (
 	"errors"
 	"fmt"
 
-	"authenticationservice/model"
-	"authenticationservice/util"
+	"authservice/model"
+	"authservice/util"
 
 	"gorm.io/gorm"
 )
