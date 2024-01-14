@@ -21,7 +21,7 @@ func main() {
 	handler := handler.NewHandler(userService, jwtService)
 
 	r := mux.NewRouter()
-	s := r.PathPrefix("/api").Subrouter()
+	s := r.PathPrefix("/api/user").Subrouter()
 	s.HandleFunc("/signup", handler.SignUpUser).Methods(http.MethodPost)
 	s.HandleFunc("/login", handler.LoginUser).Methods(http.MethodPost)
 	s.HandleFunc("/authorization/validate", handler.ValidateToken).Methods(http.MethodGet)

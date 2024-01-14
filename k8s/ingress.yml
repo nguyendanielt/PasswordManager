@@ -1,0 +1,17 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: api-ingress
+spec:
+  ingressClassName: nginx
+  rules:
+  - host: securelockr.com
+    http:
+      paths:
+      - path: /api/user
+        pathType: Prefix
+        backend:
+          service:
+            name: auth-clusterip-svc
+            port:
+              number: 8080
