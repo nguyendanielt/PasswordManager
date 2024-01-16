@@ -4,19 +4,13 @@ import (
 	"fmt"
 	"os"
 
-	"authservice/model"
+	"authservice/pkg/model"
 
 	"github.com/golang-jwt/jwt/v5"
 	"github.com/google/uuid"
 )
 
-type JwtService struct{}
-
-func NewJwtService() *JwtService {
-	return &JwtService{}
-}
-
-func (s *JwtService) GenerateJwt(user *model.User) (string, error) {
+func GenerateJwt(user *model.User) (string, error) {
 	token := jwt.NewWithClaims(jwt.SigningMethodHS256, jwt.MapClaims{
 		"id": user.ID,
 	})
@@ -28,7 +22,7 @@ func (s *JwtService) GenerateJwt(user *model.User) (string, error) {
 	return tokenStr, err
 }
 
-func (s *JwtService) ValidateJwt(tokenStr string) uuid.UUID {
+func ValidateJwt(tokenStr string) uuid.UUID {
 	type CustomClaims struct {
 		ID uuid.UUID
 		jwt.RegisteredClaims
