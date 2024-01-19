@@ -9,5 +9,5 @@ import (
 
 func CreateServer() {
 	database.InitDatabase()
-	log.Fatal(http.ListenAndServe(":8080", newRouter()))
+	log.Fatal(http.ListenAndServe(":8081", newRouter()))
 }

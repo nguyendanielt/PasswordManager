@@ -1,6 +1,8 @@
 package database
 
 import (
+	"errors"
+	"fmt"
 	"log"
 	"os"
 
@@ -9,7 +11,6 @@ import (
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
 
-	"github.com/google/uuid"
 	"github.com/joho/godotenv"
 )
 
@@ -36,22 +37,48 @@ func InitDatabase() {
 	dbConnection = db
 }
 
-func GetPasswordByAcountName(acctName string) {
-
+func GetOnePwd(acctName string, userId string) *model.Password {
+	var password model.Password
+	result := dbConnection.Model(&model.Password{}).Where("account_name = ? AND user_id = ?", acctName, userId).First(&password)
+	if errors.Is(result.Error, gorm.ErrRecordNotFound) {
+		return nil
+	}
+	return &password
 }
 
-func GetAllPasswords(userId uuid.UUID) {
-
+func GetAllPwds(userId string) []model.Password {
+	var passwords []model.Password
+	result := dbConnection.Model(&model.Password{}).Where("user_id = ?", userId).Find(&passwords)
+	if errors.Is(result.Error, gorm.ErrRecordNotFound) {
+		return nil
+	}
+	return passwords
 }
 
-func AddPassword(password *model.Password) {
-
+func AddPwd(password *model.Password) error {
+	if err := dbConnection.Create(password).Error; err != nil {
+		fmt.Println("Error when adding password:", err)
+		return err
+	}
+	fmt.Println("Successfully added password")
+	return nil
 }
 
-func DeletePassword(password *model.Password) {
-
+func DeletePwd(acctName string, userId string) error {
+	if err := dbConnection.Where("account_name = ? AND user_id = ?", acctName, userId).Delete(&model.Password{}).Error; err != nil {
+		fmt.Println("Error when deleting password:", err)
+		return err
+	}
+	fmt.Println("Successfully deleted password with account name:", acctName)
+	return nil
 }
 
-func EditPassword() {
-
+func UpdatePwd(updatedPwd *model.Password, userId string) error {
+	err := dbConnection.Where("account_name = ? AND user_id = ?", updatedPwd.AccountName, userId).Save(updatedPwd).Error
+	if err != nil {
+		fmt.Println("Error when updating password:", err)
+		return err
+	}
+	fmt.Println("Successfully updated password")
+	return nil
 }

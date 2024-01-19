@@ -31,7 +31,7 @@ func LoginUser(w http.ResponseWriter, r *http.Request) {
 	}
 	user := database.GetUserByEmailAndPassword(reqBodyUser.Email, reqBodyUser.Password)
 	if user == nil {
-		http.Error(w, "Login data could not be fetched", http.StatusInternalServerError)
+		http.Error(w, "Login data could not be fetched", http.StatusNotFound)
 		return
 	}
 	token, err := service.GenerateJwt(user)

@@ -4,6 +4,7 @@ import (
 	"net/http"
 
 	"passwordservice/internal/api/handler"
+	"passwordservice/internal/api/middleware"
 
 	"github.com/gorilla/mux"
 )
@@ -11,10 +12,11 @@ import (
 func newRouter() *mux.Router {
 	r := mux.NewRouter()
 	s := r.PathPrefix("/api/password").Subrouter()
-	s.HandleFunc("/tmp1", handler.GetPassword).Methods(http.MethodGet)
-	s.HandleFunc("/tmp2", handler.GetAllPasswords).Methods(http.MethodGet)
-	s.HandleFunc("/tmp3", handler.AddPassword).Methods(http.MethodPost)
-	s.HandleFunc("/tmp4", handler.DeletePassword).Methods(http.MethodDelete)
-	s.HandleFunc("/tmp5", handler.EditPassword).Methods(http.MethodPatch)
+	s.HandleFunc("/single", handler.GetPassword).Methods(http.MethodGet)
+	s.HandleFunc("/all", handler.GetAllPasswords).Methods(http.MethodGet)
+	s.HandleFunc("/add", handler.AddPassword).Methods(http.MethodPost)
+	s.HandleFunc("/delete", handler.DeletePassword).Methods(http.MethodDelete)
+	s.HandleFunc("/update", handler.UpdatePassword).Methods(http.MethodPut)
+	r.Use(middleware.Authorization)
 	return r
 }
