@@ -37,9 +37,9 @@ func InitDatabase() {
 	dbConnection = db
 }
 
-func GetOnePwd(acctName string, userId string) *model.Password {
+func GetPwd(passwordId string, userId string) *model.Password {
 	var password model.Password
-	result := dbConnection.Model(&model.Password{}).Where("account_name = ? AND user_id = ?", acctName, userId).First(&password)
+	result := dbConnection.Model(&model.Password{}).Where("password_id = ? AND user_id = ?", passwordId, userId).First(&password)
 	if errors.Is(result.Error, gorm.ErrRecordNotFound) {
 		return nil
 	}
@@ -64,20 +64,33 @@ func AddPwd(password *model.Password) error {
 	return nil
 }
 
-func DeletePwd(acctName string, userId string) error {
-	if err := dbConnection.Where("account_name = ? AND user_id = ?", acctName, userId).Delete(&model.Password{}).Error; err != nil {
-		fmt.Println("Error when deleting password:", err)
-		return err
+func DeletePwd(passwordId string, userId string) error {
+	var password model.Password
+	result := dbConnection.Model(&model.Password{}).Where("password_id = ?", passwordId).First(&password)
+	if errors.Is(result.Error, gorm.ErrRecordNotFound) {
+		fmt.Println("Password to delete does not exist")
+		return result.Error
 	}
-	fmt.Println("Successfully deleted password with account name:", acctName)
+	result = dbConnection.Where("password_id = ? AND user_id = ?", passwordId, userId).Delete(&model.Password{})
+	if result.Error != nil {
+		fmt.Println("Error when deleting password:", result.Error)
+		return result.Error
+	}
+	if result.RowsAffected < 1 {
+		return errors.New("no rows affected in delete")
+	}
+	fmt.Println("Successfully deleted password")
 	return nil
 }
 
-func UpdatePwd(updatedPwd *model.Password, userId string) error {
-	err := dbConnection.Where("account_name = ? AND user_id = ?", updatedPwd.AccountName, userId).Save(updatedPwd).Error
-	if err != nil {
-		fmt.Println("Error when updating password:", err)
-		return err
+func UpdatePwd(updatedPwd *model.Password) error {
+	result := dbConnection.Where("password_id = ? AND user_id = ?", updatedPwd.PasswordId.String(), updatedPwd.UserId.String()).UpdateColumns(updatedPwd)
+	if result.Error != nil {
+		fmt.Println("Error when updating password:", result.Error)
+		return result.Error
+	}
+	if result.RowsAffected < 1 {
+		return errors.New("no rows affected in update")
 	}
 	fmt.Println("Successfully updated password")
 	return nil

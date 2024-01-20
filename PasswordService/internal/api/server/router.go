@@ -12,7 +12,7 @@ import (
 func newRouter() *mux.Router {
 	r := mux.NewRouter()
 	s := r.PathPrefix("/api/password").Subrouter()
-	s.HandleFunc("/single", handler.GetPassword).Methods(http.MethodGet)
+	s.HandleFunc("/one", handler.GetPassword).Methods(http.MethodGet)
 	s.HandleFunc("/all", handler.GetAllPasswords).Methods(http.MethodGet)
 	s.HandleFunc("/add", handler.AddPassword).Methods(http.MethodPost)
 	s.HandleFunc("/delete", handler.DeletePassword).Methods(http.MethodDelete)

@@ -15,13 +15,13 @@ func GetPassword(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		return
 	}
-	password := database.GetOnePwd(reqBody.AccountName, userId)
+	password := database.GetPwd(reqBody.PasswordId.String(), userId)
 	if password == nil {
-		http.Error(w, "Password could not be fetched", http.StatusNotFound)
+		http.Error(w, "Could not find password", http.StatusNotFound)
 		return
 	}
 	helper.JsonSuccessResponse(w, map[string]interface{}{
-		"password": *password,
+		"password": password,
 	})
 }
 
@@ -29,11 +29,11 @@ func GetAllPasswords(w http.ResponseWriter, r *http.Request) {
 	userId := r.Header.Get("userid")
 	passwords := database.GetAllPwds(userId)
 	if passwords == nil {
-		http.Error(w, "Password could not be fetched", http.StatusNotFound)
+		http.Error(w, "Could not find all passwords associated with user", http.StatusNotFound)
 		return
 	}
 	helper.JsonSuccessResponse(w, map[string]interface{}{
-		"password": passwords,
+		"passwords": passwords,
 	})
 }
 
@@ -59,7 +59,7 @@ func DeletePassword(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		return
 	}
-	if err := database.DeletePwd(reqBody.AccountName, userId); err != nil {
+	if err := database.DeletePwd(reqBody.PasswordId.String(), userId); err != nil {
 		http.Error(w, "Failed to delete password", http.StatusBadRequest)
 		return
 	}
@@ -75,7 +75,7 @@ func UpdatePassword(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	reqBody.UserId = userId
-	if err := database.UpdatePwd(reqBody, userId.String()); err != nil {
+	if err := database.UpdatePwd(reqBody); err != nil {
 		http.Error(w, "Failed to update password", http.StatusBadRequest)
 		return
 	}
