@@ -15,3 +15,10 @@ spec:
             name: auth-clusterip-svc
             port:
               number: 8080
+      - path: /api/password
+        pathType: Prefix
+        backend:
+          service:
+            name: password-clusterip-svc
+            port:
+              number: 8081

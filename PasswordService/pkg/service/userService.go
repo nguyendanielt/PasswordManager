@@ -5,13 +5,15 @@ import (
 	"fmt"
 	"io"
 	"net/http"
+	"os"
 
 	"github.com/google/uuid"
 )
 
 func ValidateUser(token string) (bool, uuid.UUID, error) {
 	// create new http request to auth service with the token to verify in header
-	request, err := http.NewRequest("GET", "http://localhost:8080/api/user/authorization/validate", nil)
+	url := fmt.Sprintf("%s%s", os.Getenv("AUTH_SERVICE_HOST"), "/api/user/authorization/validate")
+	request, err := http.NewRequest("GET", url, nil)
 	if err != nil {
 		fmt.Println("Unable to create http request")
 		return false, uuid.Nil, err
