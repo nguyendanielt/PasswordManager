@@ -1,10 +1,15 @@
 package handler
 
 import (
+	"encoding/json"
+	"fmt"
 	"net/http"
+	"time"
 
+	"authservice/internal/api/asyncmessaging"
 	"authservice/internal/api/helper"
 	"authservice/pkg/database"
+	"authservice/pkg/model"
 	"authservice/pkg/service"
 
 	"github.com/google/uuid"
@@ -43,6 +48,18 @@ func LoginUser(w http.ResponseWriter, r *http.Request) {
 		"message": "Login was successful",
 		"token":   token,
 	})
+
+	// async messaging
+	activityJson, err := json.Marshal(model.Activity{
+		UserId:       user.ID,
+		ActivityType: "LOGIN",
+		DateAndTime:  time.Now(),
+	})
+	if err != nil {
+		fmt.Println("Error occurred during marshal")
+		return
+	}
+	asyncmessaging.SendActivityMessage(string(activityJson))
 }
 
 func ValidateToken(w http.ResponseWriter, r *http.Request) {
