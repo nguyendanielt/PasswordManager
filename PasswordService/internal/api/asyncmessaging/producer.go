@@ -2,14 +2,15 @@ package asyncmessaging
 
 import (
 	"fmt"
+	"os"
 
 	"github.com/IBM/sarama"
 )
 
-var brokers = []string{"127.0.0.1:9092"}
 var producer *sarama.AsyncProducer
 
 func ProducerSetup() {
+	brokers := []string{os.Getenv("BOOTSTRAP_SERVER")}
 	config := sarama.NewConfig()
 	config.Producer.Partitioner = sarama.NewRandomPartitioner
 	config.Producer.RequiredAcks = sarama.WaitForAll

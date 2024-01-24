@@ -18,6 +18,8 @@ spec:
         env:
         - name: CONNECTION_STRING
           value: "host=postgres-clusterip-svc user=postgres password=superuser dbname=usersdb port=5432 sslmode=disable TimeZone=America/New_York"
+        - name: BOOTSTRAP_SERVER
+          value: "kafka-cluster-kafka-bootstrap:9092"
         ports:
         - containerPort: 8080
 ---

@@ -7,7 +7,8 @@ import (
 )
 
 type Activity struct {
-	UserId       uuid.UUID `gorm:"primaryKey;not null"`
+	ActivityId   uuid.UUID `gorm:"primaryKey;type:uuid;default:uuid_generate_v4()"`
+	UserId       uuid.UUID `gorm:"not null"`
 	ActivityType string    `gorm:"not null"`
-	DateAndTime  time.Time `gorm:"primaryKey;not null"`
+	DateAndTime  time.Time `gorm:"not null"`
 }
