@@ -23,6 +23,7 @@ func GetPassword(w http.ResponseWriter, r *http.Request) {
 	helper.JsonSuccessResponse(w, map[string]interface{}{
 		"password": password,
 	})
+	helper.SendActivityProducerMessage(userId, "GET ONE PASSWORD")
 }
 
 func GetAllPasswords(w http.ResponseWriter, r *http.Request) {
@@ -35,6 +36,7 @@ func GetAllPasswords(w http.ResponseWriter, r *http.Request) {
 	helper.JsonSuccessResponse(w, map[string]interface{}{
 		"passwords": passwords,
 	})
+	helper.SendActivityProducerMessage(userId, "GET ALL PASSWORDS")
 }
 
 func AddPassword(w http.ResponseWriter, r *http.Request) {
@@ -51,6 +53,7 @@ func AddPassword(w http.ResponseWriter, r *http.Request) {
 	helper.JsonSuccessResponse(w, map[string]interface{}{
 		"message": "Successfully added password",
 	})
+	helper.SendActivityProducerMessage(userId.String(), "ADD PASSWORD")
 }
 
 func DeletePassword(w http.ResponseWriter, r *http.Request) {
@@ -66,6 +69,7 @@ func DeletePassword(w http.ResponseWriter, r *http.Request) {
 	helper.JsonSuccessResponse(w, map[string]interface{}{
 		"message": "Successfully deleted password",
 	})
+	helper.SendActivityProducerMessage(userId, "DELETE PASSWORD")
 }
 
 func UpdatePassword(w http.ResponseWriter, r *http.Request) {
@@ -82,4 +86,5 @@ func UpdatePassword(w http.ResponseWriter, r *http.Request) {
 	helper.JsonSuccessResponse(w, map[string]interface{}{
 		"message": "Successfully updated password",
 	})
+	helper.SendActivityProducerMessage(userId.String(), "UPDATE PASSWORD")
 }
