@@ -1,0 +1,22 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: activity-log-dep
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: activitylogservice
+  template:
+    metadata:
+      labels:
+        app: activitylogservice
+    spec:
+      containers:
+      - image: nguyendanielt/activitylogservice:latest
+        name: activitylogservice
+        env:
+        - name: CONNECTION_STRING
+          value: "host=postgres-clusterip-svc user=postgres password=superuser dbname=activitiesdb port=5432 sslmode=disable TimeZone=America/New_York"
+        - name: BOOTSTRAP_SERVER
+          value: "kafka-cluster-kafka-bootstrap:9092"

@@ -2,6 +2,7 @@ package asyncmessaging
 
 import (
 	"fmt"
+	"os"
 	"sync"
 
 	"activitylogservice/pkg/database"
@@ -9,7 +10,6 @@ import (
 	"github.com/IBM/sarama"
 )
 
-var brokers = []string{"127.0.0.1:9092"}
 var consumer *sarama.Consumer
 var messages = make(chan *sarama.ConsumerMessage, 512)
 
@@ -52,6 +52,7 @@ func ReadActivityMessages() error {
 }
 
 func consumerSetup() error {
+	brokers := []string{os.Getenv("BOOTSTRAP_SERVER")}
 	config := sarama.NewConfig()
 	c, err := sarama.NewConsumer(brokers, config)
 	if err != nil {
