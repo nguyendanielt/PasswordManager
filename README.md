@@ -15,7 +15,7 @@ Auth Service: Handles signups, logins, and JWT validation. Asynchronously sends 
 
 Password Service: Handles adding, deleting, updating, and fetching of passwords. Asynchronously sends an account activity log message to Kafka broker for each action
 
-Activity Log Service: Records account activity log messages obtained from Kafka broker and stores it in a database
+Activity Log Service: Retrieves account activity log messages from Kafka broker and stores it in a database
 
 
 
